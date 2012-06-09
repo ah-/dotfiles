@@ -42,6 +42,10 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git compleat extract git-flow history-substring-search macports osx)
 
+if [[ -e /opt/local/bin/gdircolors ]]; then
+    alias dircolors=gdircolors
+fi
+
 if [[ -e $HOME/.dir_colors ]]; then
     eval $(dircolors -b $HOME/.dir_colors)
 fi
