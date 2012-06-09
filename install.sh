@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# install oh-my-zsh: 
+# $ wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
+
 # if screen-256color is not available on a system:
 # infocmp screen-256color > /tmp/screen-256color.terminfo (already done)
 # tic screen-256color.terminfo
