@@ -21,6 +21,7 @@ ZSH_THEME="ah"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias o="open"
 
+
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
@@ -39,9 +40,20 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git compleat extract git-flow history-substring-search macports osx terminalapp)
+plugins=(git compleat extract git-flow history-substring-search macports osx)
+
+if [[ -e $HOME/.dir_colors ]]; then
+    eval $(dircolors -b $HOME/.dir_colors)
+fi
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
-export PATH=/Users/andreas/bin:/Users/andreas/wine-install/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/texbin
+alias ls="ls --color=auto --group-directories-first"
+if [[ -e /opt/local/bin/gls ]]; then
+    alias ls="gls --color=auto --group-directories-first"
+fi
+
+
+if [[ -e $HOME/.zshrc.local ]]; then
+    source $HOME/.zshrc.local
+fi
