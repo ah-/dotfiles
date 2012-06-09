@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# searches for CMake projects in the current directory hierarchy. 
+#    - it won't search outside $HOME
+#    - it will search the first directory that has :
+#        - ./CMakeLists.txt
+#        - ./build
+#    - it will execute "make" inside the build directory
+#
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# (C) 2007 Jose L. Hidalgo Valiño (pplux@pplux.com)
+
+MAKEOPTS=""
+
+# if there is a makefile in the current dir, try to use it
+# this also mimics the default makeprg behaviour of vim
+if [ -f makefile ] || [ -f Makefile ]; then
+    make $MAKEOPTS
+    exit $?
+fi
+
+while [ `pwd` != $HOME ] && [ `pwd` != / ]; do 
+	# Checks if the directory contains a CMakeList.txt and "build" dir.
+	if [ -d build ] && [ -f CMakeLists.txt ]; then
+		cd build
+		make $MAKEOPTS
+		exit $?
+	fi
+	cd .. # go back one dir
+done
+
+# make not found
+echo "Make/CMake project not found"
+exit 128
