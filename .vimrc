@@ -15,8 +15,10 @@ set ruler
 set foldmethod=syntax
 set foldlevel=100
 set ttyfast
+set virtualedit+=block
 set enc=utf-8
-set guioptions=egmrt
+set guioptions=
+set splitbelow
 syntax on
 
 let g:mapleader = ","
@@ -30,11 +32,14 @@ let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>"
 let g:SuperTabLongestHighlight = "0"
 
-let g:clang_periodic_quickfix = 0
+let g:clang_periodic_quickfix = 1
 let g:clang_snippets = 1
-"let g:clang_use_library = 1
+let g:clang_use_library = 1
+let g:clang_library_path = "/usr/lib"
+
 let g:clang_complete_auto = 0
 let g:clang_hl_errors=1
+let g:clang_debug=1
 
 map <c-w><c-t> :WMToggle<cr>
 
@@ -56,18 +61,25 @@ fun! SetupVAM()
         exec 'helptags '.fnameescape(vam_install_path.'/vim-addon-manager/doc')
     endif
 
-    call vam#ActivateAddons(['DirDiff', 'Gundo', 'Buffergator', 'current-func-info', 'FuzzyFinder', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600', 'showmarks', 'TVO_The_Vim_Outliner', 'vimoutliner-colorscheme-fix', 'vim-latex', 'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 'surround', 'Mustang2', 'SuperTab', 'delimitMate', 'snipmate', 'snipmate-snippets', 'vim-addon-local-vimrc', 'github:Rip-Rip/clang_complete', 'vim-scala-behaghel'], {'auto_install' : 1})
+    call vam#ActivateAddons(['a', 'DirDiff', 'Gundo', 'Buffergator', 'current-func-info', 'FuzzyFinder', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600', 'showmarks', 'TVO_The_Vim_Outliner', 'vimoutliner-colorscheme-fix', 'vim-latex', 'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 'surround', 'Mustang2', 'SuperTab%182', 'delimitMate', 'snipmate', 'snipmate-snippets', 'vim-addon-local-vimrc', 'github:Rip-Rip/clang_complete', 'rainbow_parentheses'], {'auto_install' : 1})
 endfun
 call SetupVAM()
 
 if has("mac")
-    set transparency=10
+    "set transparency=10
     set guifont=monaco:h10
     set noantialias
     set vb
 endif
 
 colorscheme Mustang
+
+if has("mac")
+    "set transparency=10
+    set guifont=monaco:h10
+    set noantialias
+    set vb
+endif
 
 " Complete options (disable preview scratch window)
 set completeopt=longest,menuone,preview
@@ -93,7 +105,7 @@ set wildmode=list:longest " turn on wild mode huge list
 set backspace=indent,eol,start " make backspace a more flexible
 
 " set list
-" set listchars=tab:>-,trail:- " show tabs and trailing
+set listchars=tab:>-,trail:- " show tabs and trailing
 
 set showcmd " show the command being typed
 set showmatch " show matching brackets
@@ -198,7 +210,7 @@ if has("persistend_undo")
     set undodir=/tmp
 endif
 
-set clipboard=unnamedplus
+set clipboard=unnamed
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
@@ -220,18 +232,8 @@ map <leader>fl :FufLine<CR>
 :noremap <S-h> :bprev<CR>
 :noremap <S-l> :bnext<CR>
 
-" cal split then hop to new buffer
-:noremap <Leader>wsv :vsp<cr>
-
-" Horizontal split
-:noremap <Leader>wsh :split<cr>
-
-" Close all splits except this one
-:noremap <Leader>wo :only<cr>
-
-" Close this split
-:noremap <Leader>wc :close<cr>
-
+:noremap <Leader>w :w<cr>
+:noremap <Leader>b :BuffergatorToggle<cr> 
 function! QFixToggle(forced)
     if exists("g:qfix_win") && a:forced == 0
         cclose
@@ -247,33 +249,40 @@ augroup QFixToggle
 augroup END
 
 noremap <silent><leader>qq <Esc>:call QFixToggle(0)<CR>
+noremap <silent><leader>r <Esc>:RainbowParenthesesToggleAll<CR>
 
-let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplMapWindowNavArrows = 1
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplModSelTarget = 1
+let g:buffergator_autoexpand_on_split = 0
 
 set laststatus=2
 
 " strip all trailing whitespace from file
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-nnoremap <leader>a :%! astyle --style=kr --indent=spaces=4 --pad-oper --unpad-paren --pad-header --add-brackets --align-pointer=name  --lineend=linux
+"nnoremap <leader>a :%! astyle --style=kr --indent=spaces=4 --pad-oper --unpad-paren --pad-header --add-brackets --align-pointer=name  --lineend=linux
 
 inoremap jj <ESC>
 
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null
 
-nmap <leader>ac :Tabularize /,\zs/l0l1<cr>
-vmap <leader>ac :Tabularize /,\zs/l0l1<cr>
+nmap <leader>aa :A<cr>
+nmap <leader>as :AS<cr>
+nmap <leader>av :AV<cr>
+nmap <leader>an :AN<cr>
+nmap <leader>ai :AI<cr>
 
-nmap <leader>a= :Tabularize /=<cr>
-vmap <leader>a= :Tabularize /=<cr>
+"nmap <leader>ac :Tabularize /,\zs/l0l1<cr>
+"vmap <leader>ac :Tabularize /,\zs/l0l1<cr>
+
+"nmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
+"vmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
+
+"nmap <leader>a= :Tabularize /=<cr>
+"vmap <leader>a= :Tabularize /=<cr>
 
 nmap <leader>mm :make<cr>
 vmap <leader>mm :make<cr>
 
-set makeprg=~/vim-cmake-makeprg
+set makeprg=~/.vim-cmake-makeprg
 
 map ü <C-]>
 map ö [
@@ -285,3 +294,4 @@ map Ü /
 autocmd FileType scala set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
 :au! BufRead,BufNewFile *apple-gmux*/.* setlocal noet
+nnoremap <silent> <leader>g :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>

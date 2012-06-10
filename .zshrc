@@ -43,18 +43,22 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(git compleat extract git-flow history-substring-search macports osx)
 
 if [[ -e /opt/local/bin/gdircolors ]]; then
-    alias dircolors=gdircolors
+    alias dircolors=/opt/local/bin/gdircolors
 fi
 
 if [[ -e $HOME/.dir_colors ]]; then
     eval $(dircolors -b $HOME/.dir_colors)
+    export LS_COLORS
+    zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 fi
 
 source $ZSH/oh-my-zsh.sh
 
+unsetopt SHARE_HISTORY
+
 alias ls="ls --color=auto --group-directories-first"
 if [[ -e /opt/local/bin/gls ]]; then
-    alias ls="gls --color=auto --group-directories-first"
+    alias ls="/opt/local/bin/gls --color=auto --group-directories-first"
 fi
 
 
