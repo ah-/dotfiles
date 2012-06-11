@@ -61,7 +61,7 @@ fun! SetupVAM()
         exec 'helptags '.fnameescape(vam_install_path.'/vim-addon-manager/doc')
     endif
 
-    call vam#ActivateAddons(['a', 'DirDiff', 'Gundo', 'Buffergator', 'current-func-info', 'FuzzyFinder', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600', 'showmarks', 'TVO_The_Vim_Outliner', 'vimoutliner-colorscheme-fix', 'vim-latex', 'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 'surround', 'Mustang2', 'SuperTab%182', 'delimitMate', 'snipmate', 'snipmate-snippets', 'vim-addon-local-vimrc', 'github:Rip-Rip/clang_complete', 'rainbow_parentheses'], {'auto_install' : 1})
+    call vam#ActivateAddons(['a', 'DirDiff', 'Gundo', 'Buffergator', 'current-func-info', 'FuzzyFinder', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600', 'showmarks', 'TVO_The_Vim_Outliner', 'vimoutliner-colorscheme-fix', 'vim-latex', 'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 'surround', 'Mustang2', 'SuperTab%182', 'delimitMate', 'snipmate', 'snipmate-snippets', 'vim-addon-local-vimrc', 'github:Rip-Rip/clang_complete', 'rainbow_parentheses', 'extradite'], {'auto_install' : 1})
 endfun
 call SetupVAM()
 
