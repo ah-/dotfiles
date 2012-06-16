@@ -18,7 +18,7 @@ set ttyfast
 set virtualedit+=block
 set enc=utf-8
 set guioptions=
-set splitbelow
+"set splitbelow
 syntax on
 
 let g:mapleader = ","
@@ -61,7 +61,7 @@ fun! SetupVAM()
         exec 'helptags '.fnameescape(vam_install_path.'/vim-addon-manager/doc')
     endif
 
-    call vam#ActivateAddons(['a', 'DirDiff', 'Gundo', 'Buffergator', 'current-func-info', 'FuzzyFinder', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600', 'showmarks', 'TVO_The_Vim_Outliner', 'vimoutliner-colorscheme-fix', 'vim-latex', 'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 'surround', 'Mustang2', 'SuperTab%182', 'delimitMate', 'snipmate', 'snipmate-snippets', 'vim-addon-local-vimrc', 'github:Rip-Rip/clang_complete', 'rainbow_parentheses', 'extradite'], {'auto_install' : 1})
+    call vam#ActivateAddons(['a', 'DirDiff', 'Gundo', 'Buffergator', 'current-func-info', 'FuzzyFinder', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600', 'showmarks', 'TVO_The_Vim_Outliner', 'vimoutliner-colorscheme-fix', 'vim-latex', 'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 'surround', 'Mustang2', 'SuperTab%182', 'delimitMate', 'snipmate', 'snipmate-snippets', 'vim-addon-local-vimrc', 'rainbow_parentheses', 'extradite', 'AutoTag', 'github:Rip-Rip/clang_complete'], {'auto_install' : 1})
 endfun
 call SetupVAM()
 
@@ -158,20 +158,20 @@ endif
 " au BufWritePost *.tex call Tex_RunLaTeX()
 
 " if exists('*IMAP')
-    augroup MyIMAPs
-      au!
-      au VimEnter * call IMAP('veps', "\\varepsilon",'tex')
-      au VimEnter * call IMAP('CRE', "\hat{a}_{}^{\\dagger}",'tex')
-      au VimEnter * call IMAP('ANI', "\hat{a}_{<++>}",'tex')
+"    augroup MyIMAPs
+"      au!
+"      au VimEnter * call IMAP('veps', "\\varepsilon",'tex')
+"      au VimEnter * call IMAP('CRE', "\hat{a}_{}^{\\dagger}",'tex')
+"      au VimEnter * call IMAP('ANI', "\hat{a}_{<++>}",'tex')
+"
+"      au VimEnter * call IMAP('EAL', "\\begin{align}\<CR><++>\<CR>\\end{align}<++>",'tex')
+"
+"      au VimEnter * call IMAP('EFE', "\\begin{figure}\<CR><++>\<CR>\\end{figure}<++>", 'tex')
+"      au VimEnter * call IMAP('MAT', "\\begin{bmatrix}<++>\\end{bmatrix}<++>", 'tex')
+"      au VimEnter * call IMAP('DET', "\\begin{vmatrix}<++>\\end{vmatrix}<++>", 'tex')
+"      au VimEnter * call IMAP('SUBFI', "\\begin{figure}[htbp]\<CR>\\centering\<CR>\\subfigure[<+Title 1+>]{\<CR>\\includegraphics[width=7cm]{<+File 1+>}\<CR>\\label{fig:<+Label 1+>}\<CR>}\<CR>\\subfigure[<+Title 2+>]{\<CR>\\includegraphics[width=7cm]{<+File 2+>}\<CR>\\label{fig:<+Label 2+>}\<CR>}\<CR>\\caption{<+Main caption+>}\<CR>\\label{fig:<+Label+>}\<CR>\\end{figure}\<CR><++>", 'tex')
 
-      au VimEnter * call IMAP('EAL', "\\begin{align}\<CR><++>\<CR>\\end{align}<++>",'tex')
-
-      au VimEnter * call IMAP('EFE', "\\begin{figure}\<CR><++>\<CR>\\end{figure}<++>", 'tex')
-      au VimEnter * call IMAP('MAT', "\\begin{bmatrix}<++>\\end{bmatrix}<++>", 'tex')
-      au VimEnter * call IMAP('DET', "\\begin{vmatrix}<++>\\end{vmatrix}<++>", 'tex')
-      au VimEnter * call IMAP('SUBFI', "\\begin{figure}[htbp]\<CR>\\centering\<CR>\\subfigure[<+Title 1+>]{\<CR>\\includegraphics[width=7cm]{<+File 1+>}\<CR>\\label{fig:<+Label 1+>}\<CR>}\<CR>\\subfigure[<+Title 2+>]{\<CR>\\includegraphics[width=7cm]{<+File 2+>}\<CR>\\label{fig:<+Label 2+>}\<CR>}\<CR>\\caption{<+Main caption+>}\<CR>\\label{fig:<+Label+>}\<CR>\\end{figure}\<CR><++>", 'tex')
-
-    augroup END
+"    augroup END
 " endif
 
 " }
@@ -295,3 +295,5 @@ autocmd FileType scala set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
 :au! BufRead,BufNewFile *apple-gmux*/.* setlocal noet
 nnoremap <silent> <leader>g :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
+
+set tags=tags;/
