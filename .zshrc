@@ -65,3 +65,15 @@ fi
 if [[ -e $HOME/.zshrc.local ]]; then
     source $HOME/.zshrc.local
 fi
+
+prefix() {
+   export WINEPREFIX="$HOME/.local/share/wineprefixes/$1"
+}
+
+goc() {
+   cd $WINEPREFIX/drive_c
+}
+
+lsp() {
+   ls $* $HOME/.local/share/wineprefixes
+}

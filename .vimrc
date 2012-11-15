@@ -22,24 +22,39 @@ set guioptions=
 syntax on
 
 let g:mapleader = ","
+let g:maplocalleader = ","
 
 nnoremap <silent> <c-n> :NERDTreeToggle<CR>
-nnoremap <silent> <c-i> :TagbarToggle<CR>
 nnoremap <silent> <leader>tt :TagbarToggle<CR>
 
-" SuperTab option for context aware completion
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>"
-let g:SuperTabLongestHighlight = "0"
+let g:UltiSnipsEditSplit = "vertical"
 
-let g:clang_periodic_quickfix = 1
-let g:clang_snippets = 1
-let g:clang_use_library = 1
-let g:clang_library_path = "/usr/lib"
+let g:languagetool_jar='/Users/andreas/Downloads/LanguageTool/LanguageTool.jar'
 
-let g:clang_complete_auto = 0
-let g:clang_hl_errors=1
-let g:clang_debug=1
+let g:LatexBox_latexmk_options = "-pdf -pvc"
+
+let g:slime_target = "tmux"
+
+" Clang Complete Settings
+"let g:clang_library_path='/opt/local/libexec/llvm-3.2/lib/'
+let g:clang_use_library=0
+let g:clang_complete_copen=1
+let g:clang_complete_macros=1
+let g:clang_complete_patterns=0
+let g:clang_complete_auto=0
+let g:clang_snippets=1
+" Avoids lame path cache generation and other unknown sources for includes 
+let g:clang_auto_user_options=''
+let g:clang_memory_percent=70
+"let g:neocomplcache_force_overwrite_completefunc=1
+
+"set conceallevel=2
+"set concealcursor=vin
+let g:clang_snippets=1
+"let g:clang_conceal_snippets=1
+" The single one that works with clang_complete
+let g:clang_snippets_engine='ultisnips'
+nnoremap <Leader>uu :call g:ClangUpdateQuickFix()<CR>
 
 map <c-w><c-t> :WMToggle<cr>
 
@@ -61,7 +76,21 @@ fun! SetupVAM()
         exec 'helptags '.fnameescape(vam_install_path.'/vim-addon-manager/doc')
     endif
 
-    call vam#ActivateAddons(['a', 'DirDiff', 'Gundo', 'Buffergator', 'current-func-info', 'FuzzyFinder', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600', 'showmarks', 'TVO_The_Vim_Outliner', 'vimoutliner-colorscheme-fix', 'vim-latex', 'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 'surround', 'Mustang2', 'SuperTab%182', 'delimitMate', 'snipmate', 'snipmate-snippets', 'vim-addon-local-vimrc', 'rainbow_parentheses', 'extradite', 'AutoTag', 'github:Rip-Rip/clang_complete'], {'auto_install' : 1})
+" 
+" "'github:Shougo/neocomplcache-clang_complete',  'neocomplcache', 
+    ""
+    "
+    call vam#ActivateAddons(['vimproc', 'a',
+\    'current-func-info', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600',
+\    'showmarks', 'vimoutliner-colorscheme-fix', 'TVO_The_Vim_Outliner',
+\    'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 
+\    'surround', 'Mustang2', 'delimitMate', 'vim-addon-local-vimrc',
+\    'rainbow_parentheses', 'extradite', 'AutoTag', 'quickfixsigns',
+\    'vim-scala@behaghel', 'vim-addon-sbt', 'UltiSnips', 'LanguageTool',
+\    'github:LaTeX-Box-Team/LaTeX-Box', 'github:oblitum/clang_complete',
+\    'github:jpalardy/vim-slime', 'unite', 'unite-outline', 'unite-ack',
+\    'vimfiler', 'github:andreypopp/ensime', 'surround', 'github:jceb/vim-orgmode'], {'auto_install' : 1})
+    " , 'DirDiff'
 endfun
 call SetupVAM()
 
@@ -76,13 +105,13 @@ colorscheme Mustang
 
 if has("mac")
     "set transparency=10
-    set guifont=monaco:h10
-    set noantialias
+    "set guifont=monaco:h10
+    "set noantialias
     set vb
 endif
 
 " Complete options (disable preview scratch window)
-set completeopt=longest,menuone,preview
+set completeopt=longest,menuone ",preview
 set pumheight=15
 set nocompatible
 
@@ -127,7 +156,7 @@ set grepprg=grep\ -nH\ $*
 let g:tex_flavor='latex'
 
 " Vim-LaTex settings
-" let g:Tex_SmartKeyQuote = 1
+ let g:Tex_SmartKeyQuote = 0
 "
 " let g:Tex_GotoError=0 " don't go automaticly to first error
 " Note: latex/suitecompiler.vim, at line 605, calls 'cfile', which will
@@ -196,7 +225,7 @@ vnoremap >           >gv
 "
 " History and backup
 "
-set viminfo='10,:20,\"100,%,n~/.viminfo
+set viminfo='10,:20,\"100,n~/.viminfo
 set history=1000
 set nobackup
 set nowritebackup
@@ -221,19 +250,10 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set listchars=tab:>-,trail:·,eol:$
 nmap <silent> <leader>s :set nolist!<CR>
 
-map <leader>fb :FufBuffer<CR>
-map <leader>ff :FufFile<CR>
-map <leader>fd :FufDir<CR>
-map <leader>ft :FufTag<CR>
-map <leader>fc :FufCoverageFile<CR>
-map <leader>fr :FufTagWithCursorWord!<CR>
-map <leader>fl :FufLine<CR>
-
 :noremap <S-h> :bprev<CR>
 :noremap <S-l> :bnext<CR>
 
 :noremap <Leader>w :w<cr>
-:noremap <Leader>b :BuffergatorToggle<cr> 
 function! QFixToggle(forced)
     if exists("g:qfix_win") && a:forced == 0
         cclose
@@ -250,8 +270,6 @@ augroup END
 
 noremap <silent><leader>qq <Esc>:call QFixToggle(0)<CR>
 noremap <silent><leader>r <Esc>:RainbowParenthesesToggleAll<CR>
-
-let g:buffergator_autoexpand_on_split = 0
 
 set laststatus=2
 
@@ -270,17 +288,30 @@ nmap <leader>av :AV<cr>
 nmap <leader>an :AN<cr>
 nmap <leader>ai :AI<cr>
 
-"nmap <leader>ac :Tabularize /,\zs/l0l1<cr>
-"vmap <leader>ac :Tabularize /,\zs/l0l1<cr>
+nmap <leader>ac :Tabularize /,\zs/l0l1<cr>
+vmap <leader>ac :Tabularize /,\zs/l0l1<cr>
 
-"nmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
-"vmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
+nmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
+vmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
 
-"nmap <leader>a= :Tabularize /=<cr>
-"vmap <leader>a= :Tabularize /=<cr>
+nmap <leader>a& :Tabularize /&/l1l1<cr>
+vmap <leader>a& :Tabularize /&/l1l1<cr>
+
+nmap <leader>a= :Tabularize /=<cr>
+vmap <leader>a= :Tabularize /=<cr>
 
 nmap <leader>mm :make<cr>
 vmap <leader>mm :make<cr>
+
+nmap <leader>mp :exec "!makebg" v:servername "'" . &makeprg . "'" &makeef<CR><CR>
+nmap <leader>mc :exec "!rm " &makeef "; makebg" v:servername "'" . &makeprg . "'"  &makeef<CR><CR> 
+
+command! -nargs=1 OpenURL :call OpenURL(<q-args>)
+" open URL under cursor in browser
+nnoremap <leader>gb :OpenURL <cfile><CR>
+nnoremap <leader>gA :OpenURL http://www.answers.com/<cword><CR>
+nnoremap <leader>gG :OpenURL http://www.google.com/search?q=<cword><CR>
+nnoremap <leader>gW :OpenURL http://en.wikipedia.org/wiki/Special:Search?search=<cword><CR>
 
 set makeprg=~/.vim-cmake-makeprg
 
@@ -291,9 +322,124 @@ map Ö {
 map Ä }
 map Ü /
 
-autocmd FileType scala set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
 :au! BufRead,BufNewFile *apple-gmux*/.* setlocal noet
 nnoremap <silent> <leader>g :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 set tags=tags;/
+
+if (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8') && version >= 700
+  let &listchars = "tab:\u21e5\u00b7,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u26ad"
+else
+    set listchars=tab:>\ ,trail:-,extends:>,precedes:<
+endif
+
+au BufNewFile,BufRead repl set filetype=scala
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  Unite                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"call unite#custom_filters('file,file/new,buffer,file_rec', ['matcher_fuzzy', 'sorter_default', 'converter_default'])
+"call unite#custom_filters('file', ['matcher_fuzzy', 'sorter_default', 'converter_default'])
+" The prefix key.
+nnoremap    [unite]   <Nop>
+nmap    <leader>f [unite]
+
+nnoremap <silent> [unite]e  :<C-u>UniteWithCursorWord
+\ -buffer-name=ack ack<CR>
+nnoremap <silent> [unite]a  :<C-u>Unite
+\ -buffer-name=ack ack<CR>
+nnoremap <silent> [unite]c  :<C-u>Unite
+\ -buffer-name=file_rec file_rec<CR>
+"nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
+"\ -buffer-name=file_rec_buffer -prompt=%\ file_rec file_mru<CR>
+nnoremap <silent> [unite]b  :<C-u>Unite
+\ -buffer-name=buffers buffer_tab<CR>
+nnoremap <silent> [unite]t  :<C-u>Unite
+\ -buffer-name=buffers tab<CR>
+nnoremap <silent> [unite]r  :<C-u>Unite
+\ -buffer-name=register register<CR>
+nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
+nnoremap <silent> [unite]f
+\ :<C-u>Unite -buffer-name=resume resume<CR>
+nnoremap <silent> [unite]d
+\ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+nnoremap <silent> [unite]ma
+\ :<C-u>Unite mapping<CR>
+nnoremap <silent> [unite]me
+\ :<C-u>Unite output:message<CR>
+nnoremap <silent> [unite]r  :<C-u>UniteResume<CR>
+nnoremap  [unite]f  :<C-u>Unite source<CR>
+nnoremap <silent> [unite]l  :<C-u>Unite
+\ -buffer-name=line line<CR>
+
+nnoremap <silent> [unite]s
+        \ :<C-u>Unite -buffer-name=files -no-split
+        \ jump_point file_point buffer_tab
+        \ file_rec:! file file/new file_mru<CR>
+
+
+" Start insert.
+let g:unite_enable_start_insert = 1
+"let g:unite_enable_short_source_names = 1
+
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()"{{{
+  " Overwrite settings.
+
+  nmap <buffer> <ESC>      <Plug>(unite_exit)
+  imap <buffer> jj      <Plug>(unite_insert_leave)
+  "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+
+imap <buffer><expr> j unite#smart_map('j', '')
+"imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+imap <buffer> '     <Plug>(unite_quick_match_default_action)
+nmap <buffer> '     <Plug>(unite_quick_match_default_action)
+imap <buffer><expr> x
+        \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
+nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+nnoremap <silent><buffer><expr> l
+        \ unite#smart_map('l', unite#do_action('default'))
+
+let unite = unite#get_current_unite()
+if unite.buffer_name =~# '^search'
+  nnoremap <silent><buffer><expr> r     unite#do_action('replace')
+else
+  nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+endif
+
+nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
+nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
+\ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+endfunction"}}}
+
+"let g:vimfiler_as_default_explorer = 1
+"let g:vimfiler_safe_mode_by_default = 0
+"let g:vimfiler_tree_leaf_icon = ' '
+"let g:vimfiler_tree_opened_icon = '▾'
+"let g:vimfiler_tree_closed_icon = '▸'
+"let g:vimfiler_file_icon = '-'
+"let g:vimfiler_marked_file_icon = '*'
+
+"autocmd VimEnter * if !argc() | VimFiler | endif
+
+"nnoremap <silent> <c-n> :VimFiler -buffer-name=explorer -split -winwidth=50 -toggle -no-quit<CR>
+
+"let g:neocomplcache_enable_at_startup = 1
+autocmd FileType scala set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+let g:surround_{char2nr('c')} = "\\\1command\1{\r}"
+
+" clean up windows file endings
+nnoremap <leader>vl :%s/\r$<CR>
+"nnoremap <leader>vi :%s/\#include <GL\/freeglut.h>/\#ifdef OSXGLUT\#include <glut.h>\#else\#include <GL\/freeglut.h>\#endif<CR>
+nnoremap <leader>vi :%s/#include <GL\/freeglut.h>/\#ifdef OSXGLUT\#include <foo.h>#endif<CR>
+
+au BufEnter *.scala setl formatprg=java\ -jar\ ~/Downloads/scalariform.jar\ --stdin\ --stdout
