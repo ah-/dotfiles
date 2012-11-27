@@ -12,7 +12,8 @@ set smartcase 		" Intelligent case-smart searching
 set gdefault
 set hidden
 set ruler
-set foldmethod=syntax
+"set foldmethod=syntax
+set foldmethod=expr
 set foldlevel=100
 set ttyfast
 set virtualedit+=block
@@ -23,9 +24,11 @@ syntax on
 
 let g:mapleader = ","
 let g:maplocalleader = ","
+let g:LatexBox_Folding=1
 
 nnoremap <silent> <c-n> :NERDTreeToggle<CR>
 nnoremap <silent> <leader>tt :TagbarToggle<CR>
+nnoremap <Space> za
 
 let g:UltiSnipsEditSplit = "vertical"
 
@@ -36,7 +39,7 @@ let g:LatexBox_latexmk_options = "-pdf -pvc"
 let g:slime_target = "tmux"
 
 " Clang Complete Settings
-"let g:clang_library_path='/opt/local/libexec/llvm-3.2/lib/'
+"let g:clang_library_path='/opt/local/libexec/llvm-3.2/lib'
 let g:clang_use_library=0
 let g:clang_complete_copen=1
 let g:clang_complete_macros=1
@@ -44,8 +47,9 @@ let g:clang_complete_patterns=0
 let g:clang_complete_auto=0
 let g:clang_snippets=1
 " Avoids lame path cache generation and other unknown sources for includes 
-let g:clang_auto_user_options=''
-let g:clang_memory_percent=70
+"let g:clang_auto_user_options=''
+let g:clang_memory_percent=80
+let g:clang_debug=1
 "let g:neocomplcache_force_overwrite_completefunc=1
 
 "set conceallevel=2
@@ -76,20 +80,16 @@ fun! SetupVAM()
         exec 'helptags '.fnameescape(vam_install_path.'/vim-addon-manager/doc')
     endif
 
-" 
-" "'github:Shougo/neocomplcache-clang_complete',  'neocomplcache', 
-    ""
-    "
     call vam#ActivateAddons(['vimproc', 'a',
 \    'current-func-info', 'Tabular', 'fugitive', 'cmake%599', 'cmake%600',
 \    'showmarks', 'vimoutliner-colorscheme-fix', 'TVO_The_Vim_Outliner',
-\    'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter', 
+\    'The_NERD_tree', 'github:majutsushi/tagbar', 'The_NERD_Commenter',
 \    'surround', 'Mustang2', 'delimitMate', 'vim-addon-local-vimrc',
-\    'rainbow_parentheses', 'extradite', 'AutoTag', 'quickfixsigns',
-\    'vim-scala@behaghel', 'vim-addon-sbt', 'UltiSnips', 'LanguageTool',
-\    'github:LaTeX-Box-Team/LaTeX-Box', 'github:oblitum/clang_complete',
-\    'github:jpalardy/vim-slime', 'unite', 'unite-outline', 'unite-ack',
-\    'vimfiler', 'github:andreypopp/ensime', 'surround', 'github:jceb/vim-orgmode'], {'auto_install' : 1})
+\    'rainbow_parentheses', 'extradite', 'quickfixsigns', 'EasyMotion',
+\    'vim-scala@behaghel', 'vim-addon-sbt', 'Mustang2', 'vimwiki',
+\    'github:LaTeX-Box-Team/LaTeX-Box', 'github:tobig/clang_complete',
+\    'github:jpalardy/vim-slime', 'unite', 'unite-outline', 'unite-ack', 
+\    'UltiSnips', 'surround'], {'auto_install' : 1})
     " , 'DirDiff'
 endfun
 call SetupVAM()
@@ -101,6 +101,9 @@ if has("mac")
     set vb
 endif
 
+let g:molokai_original=1
+"colorscheme wombat256mod
+"colorscheme molokai
 colorscheme Mustang
 
 if has("mac")
@@ -437,9 +440,17 @@ endfunction"}}}
 autocmd FileType scala set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 let g:surround_{char2nr('c')} = "\\\1command\1{\r}"
 
+nnoremap <leader>i :IndentGuidesToggle<CR>
+
 " clean up windows file endings
 nnoremap <leader>vl :%s/\r$<CR>
 "nnoremap <leader>vi :%s/\#include <GL\/freeglut.h>/\#ifdef OSXGLUT\#include <glut.h>\#else\#include <GL\/freeglut.h>\#endif<CR>
 nnoremap <leader>vi :%s/#include <GL\/freeglut.h>/\#ifdef OSXGLUT\#include <foo.h>#endif<CR>
 
 au BufEnter *.scala setl formatprg=java\ -jar\ ~/Downloads/scalariform.jar\ --stdin\ --stdout
+
+nnoremap <leader>oo :set guifont=monaco:h12<CR>:set antialias<CR>
+nnoremap <leader>ol :set guifont=monaco:h10<CR>:set noantialias<CR>
+
+au BufRead,BufNewFile *.pde set filetype=Cpp
+au BufRead,BufNewFile *.ino set filetype=Cpp
