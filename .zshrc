@@ -47,7 +47,7 @@ if [[ -e /opt/local/bin/gdircolors ]]; then
 fi
 
 if [[ -e $HOME/.dir_colors ]]; then
-    eval $(dircolors -b $HOME/.dir_colors)
+    eval $(gdircolors -b $HOME/.dir_colors)
     export LS_COLORS
     zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 fi

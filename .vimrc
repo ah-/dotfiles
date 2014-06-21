@@ -1,3 +1,6 @@
+syntax on
+filetype plugin indent on
+
 set t_Co=256
 set number
 set smartindent
@@ -20,7 +23,7 @@ set guioptions=
 set cul
 set vb
 set laststatus=2
-set macmeta
+"set macmeta
 
 " Complete options (disable preview scratch window)
 "set completeopt=longest,menuone ",preview
@@ -58,31 +61,16 @@ set noswapfile
 set clipboard=unnamed
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set makeprg=~/.vim-cmake-makeprg
 
-syntax on
-filetype plugin indent on
-
-if has("mac")
-    set guifont=monaco:h10
-    set noantialias
-endif
-
-let g:mapleader = ","
-let g:maplocalleader = ","
-let g:LatexBox_Folding = 1
+let g:mapleader = " "
+let g:maplocalleader = " "
 let g:UltiSnipsEditSplit = "vertical"
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_safe_mode_by_default = 0
-
-let g:ycm_semantic_triggers =  {}
 
 cmap W! w !sudo tee % >/dev/null
 
 nnoremap <silent> <c-n> :NERDTreeToggle<CR>
 "nnoremap <silent> <c-n> :VimFiler -toggle -simple<CR>
 nnoremap <silent> <leader>tt :TagbarToggle<CR>
-nnoremap <Space> za
 
 " Quickly edit/reload the vimrc file
 nnoremap <silent> <leader>ev :tabe $MYVIMRC<CR>
@@ -124,18 +112,21 @@ noremap <silent><leader>r <Esc>:RainbowParenthesesToggleAll<CR>
 
 " strip all trailing whitespace from file
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-"nnoremap <leader>a :%! astyle --style=kr --indent=spaces=4 --pad-oper --unpad-paren --pad-header --add-brackets --align-pointer=name  --lineend=linux
+nnoremap <leader>a :%! astyle --style=attach --indent=spaces=4 --pad-oper --unpad-paren --pad-header --add-brackets --align-pointer=name  --lineend=linux
 
 inoremap jj <ESC>
 
-nmap <leader>aa :A<cr>
-nmap <leader>as :AS<cr>
-nmap <leader>av :AV<cr>
-nmap <leader>an :AN<cr>
-nmap <leader>ai :AI<cr>
+"nmap <leader>aa :A<cr>
+"nmap <leader>as :AS<cr>
+"nmap <leader>av :AV<cr>
+"nmap <leader>an :AN<cr>
+"nmap <leader>ai :AI<cr>
 
 nmap <leader>ac :Tabularize /,\zs/l0l1<cr>
 vmap <leader>ac :Tabularize /,\zs/l0l1<cr>
+
+nmap <leader>as :Tabularize / \zs<cr>
+vmap <leader>as :Tabularize / \zs<cr>
 
 nmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
 vmap <leader>a' :Tabularize /^[^']*/l0l1<cr>
@@ -152,15 +143,17 @@ vmap <leader>mm :make<cr>
 nnoremap <leader>oo :set guifont=Inconsolata:h14<CR>:set antialias<CR>
 nnoremap <leader>ol :set guifont=monaco:h10<CR>:set noantialias<CR>
 
-map ü <C-]>
-map ö [
-map ä ]
-map Ö {
-map Ä }
-map Ü /
+"map ü <C-]>
+"map ö [
+"map ä ]
+"map Ö {
+"map Ä }
+"map Ü /
 
 nmap <leader>p <Plug>yankstack_substitute_older_paste
 nmap <leader>P <Plug>yankstack_substitute_newer_paste
+
+let g:slime_target = "tmux"
 
 fun! SetupVAM()
     " YES, you can customize this vam_install_path path and everything still works!
@@ -177,11 +170,12 @@ fun! SetupVAM()
         " VAM run helptags automatically if you install or update plugins
         exec 'helptags '.fnameescape(vam_install_path.'/vim-addon-manager/doc')
     endif
+"\       'a',
+"\       'yankstack',
     call vam#ActivateAddons([
-\       'a',
-\       'yankstack',
-\       'UltiSnips',
+\       'vimproc',
 \       'Mustang2',
+\       'Solarized',
 \       'Lucius',
 \       'vombato-colorscheme',
 \       'The_NERD_Commenter',
@@ -190,13 +184,16 @@ fun! SetupVAM()
 \       'rainbow_parentheses',
 \       'quickfixsigns',
 \       'The_NERD_tree',
-\       'YouCompleteMe',
-\       'Syntastic',
-\       'unite', 'unite-outline', 'unite-ack',
+\       'unite', 'unite-outline',
 \       'vimoutliner-colorscheme-fix', 'TVO_The_Vim_Outliner',
+\       'vimfiler',
+\       'csindent',
+\       'YouCompleteMe',
+\       'vim-sneak',
+\       'UltiSnips',
+\       'Tabular', 'fugitive', 'vim-git-log', 'github:epeli/slimux', 'DirDiff',
 \       'surround'], {'auto_install' : 1})
-"\       'vimfiler',
-"\    'Tabular', 'fugitive', 'cmake%599', 'cmake%600',
+"\       'Syntastic',
 "\    'The_NERD_tree', 'github:majutsushi/tagbar',
 "\    'extradite', 'EasyMotion',
 "\    'vim-scala@behaghel', 'vim-addon-sbt',
@@ -205,10 +202,10 @@ fun! SetupVAM()
 endfun
 call SetupVAM()
 
-"colorscheme Mustang
+colorscheme Mustang
 "highlight SignColumn ctermbg=Black guibg=#000000
 "colorscheme Lucius
-colorscheme vombato
+"colorscheme vombato
 
 " Folding background
 "hi Folded guibg=bg
@@ -219,18 +216,18 @@ colorscheme vombato
 "                                  Unite                                  "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"call unite#custom_filters('file,file/new,buffer,file_rec', ['matcher_fuzzy', 'sorter_default', 'converter_default'])
-"call unite#custom_filters('file', ['matcher_fuzzy', 'sorter_default', 'converter_default'])
-" The prefix key.
+call unite#custom_filters('file,file/new,buffer,file_rec', ['matcher_fuzzy', 'sorter_default', 'converter_default'])
+call unite#custom_filters('file', ['matcher_fuzzy', 'sorter_default', 'converter_default'])
+ "The prefix key.
 nnoremap    [unite]   <Nop>
 nmap    <leader>f [unite]
 
 nnoremap <silent> [unite]e  :<C-u>UniteWithCursorWord
-\ -buffer-name=ack ack<CR>
+\ -buffer-name=ack grep:.<CR>
 nnoremap <silent> [unite]a  :<C-u>Unite
-\ -buffer-name=ack ack<CR>
+\ -buffer-name=ack grep:.<CR>
 nnoremap <silent> [unite]c  :<C-u>Unite
-\ -buffer-name=file_rec file_rec<CR>
+\ -buffer-name=file_rec file_rec/async<CR>
 "nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
 "\ -buffer-name=file_rec_buffer -prompt=%\ file_rec file_mru<CR>
 nnoremap <silent> [unite]b  :<C-u>Unite
@@ -262,6 +259,10 @@ nnoremap <silent> [unite]s
 " Start insert.
 let g:unite_enable_start_insert = 1
 "let g:unite_enable_short_source_names = 1
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+let g:unite_source_grep_recursive_opt = ''
+
 
 autocmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()"{{{
@@ -300,3 +301,46 @@ nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
 nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
 \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
 endfunction"}}}
+
+
+"format current line or selected (both command and insert modes)
+nnoremap <C-I> :pyf ~/trunk/tools/clang-format/clang-format.py<CR>
+vnoremap <C-I> :pyf ~/trunk/tools/clang-format/clang-format.py<CR>
+inoremap <C-I> <ESC>:pyf ~/trunk/tools/clang-format/clang-format.py<CR>i
+
+"format all (both command and insert modes)
+nnoremap <F6> ggVG :pyf ~/trunk/tools/clang-format/clang-format.py<CR><CR>
+imap <F6> ggVG :pyf ~/trunk/tools/clang-format/clang-format.py<CR><CR>i
+
+map <C-c><C-c> :SlimuxREPLSendLine<CR>
+vmap <C-c><C-c> :SlimuxREPLSendSelection<CR>
+
+" Integrates UltiSnips tab completion with YouCompleteMe
+" See: https://github.com/Valloric/YouCompleteMe/issues/36
+function! g:UltiSnips_Complete()
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res == 0
+    if pumvisible()
+      return "\<C-n>"
+    else
+      call UltiSnips_JumpForwards()
+      if g:ulti_jump_forwards_res == 0
+        return "\<TAB>"
+      endif
+    endif
+  endif
+  return ""
+endfunction
+
+" This only works, if a new buffer is opened. And not if vi opens the file
+" directly.
+au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<tab>"
+
+" Alternative version to use snippets.
+let g:UltiSnipsExpandTrigger = '<c-l>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+"let g:UltiSnipsListSnippets = '<c-m>'
